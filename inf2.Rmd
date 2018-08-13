@@ -1,0 +1,61 @@
+# Peer-graded Assignment: Statistical Inference Course Project
+
+## Part 2:Basic Inferential Data Analysis.<br>
+In this part we are going to analyze the ToothGrowth dataset and draw appropriate inferences.<br>
+**Basic summarization of the data**
+```{r}
+library(dplyr)
+library(ggplot2)
+data("ToothGrowth")
+str(ToothGrowth)
+head(ToothGrowth)
+summary(ToothGrowth)
+```
+
+**exploratory data analysis of the dataset**
+```{r}
+sub_data<-group_by(ToothGrowth,supp,dose)
+summ_data<-summarise(sub_data,mean_growth=mean(len))
+ggplot(summ_data,aes(supp,mean_growth,fill=supp))+geom_bar(stat = "identity")+facet_grid(.~dose)+
+  labs(x="supplement")+labs(y="mean growth of tooth")
+```
+
+*This exploratory analysis shows that the average growth of tooth with supplement OJ seems to be larger than that with supplement VC for dose of 0.5 and 1.With dose 2,no significant difference in the average tooth growth is observed.*
+
+## Hypothesis tests to compare tooth growth by supp and dose.<br>
+In this part we will conduct hypothesis tests for the observed explorations.As the sample size is small t tests will be appropriate as compared to z tests.<br>
+Assumption:For t test it is assumed that the underlying data points are iids.<br>
+**The first test will be coducted for tooth growth for OJ and VC supplements.**<br>
+```{r}
+t.test(len~supp,data = ToothGrowth)
+```
+
+*This T test does not conclude the efficacy of either supplements.*
+
+**The second test will be coducted for tooth growth for OJ and VC supplements when the dose is 0.5.**<br>
+```{r}
+t.test(len~supp,filter(ToothGrowth,dose==0.5))
+```
+
+*This T test concludes that OJ supplement is more effective in comparison to VC when the dose given is 0.5*<br>
+
+**The third test will be coducted for tooth growth for OJ and VC supplements when the dose is 1.**<br>
+```{r}
+t.test(len~supp,filter(ToothGrowth,dose==1))
+```
+
+*This T test concludes that OJ supplement is more effective in comparison to VC when the dose given is 1*
+
+**The fourth test will be coducted for tooth growth for OJ and VC supplements when the dose is 0.5.**<br>
+
+```{r}
+t.test(len~supp,filter(ToothGrowth,dose==2))
+```
+
+*This test concludes that neither is more effective than other when the dose given is 2.*
+
+## Conclusion
+*OJ ensures more tooth growth than VC for dosages 0.5 & 1.0. OJ and VC givesthe same amount of tooth growth for dose amount 2.0 mg/day. For the entire trail we cannot conclude OJ is more effective that VC for all scenarios.*
+
+
+

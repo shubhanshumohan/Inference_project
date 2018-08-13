@@ -1,0 +1,36 @@
+
+# Peer-graded Assignment: Statistical Inference Course Project
+
+## Part 1:Simulation exercise.<br>
+In this project we will investigate the exponential distribution in R and compare it with the Central Limit Theorem. The exponential distribution can be simulated in R with rexp(n, lambda) where lambda is the rate parameter. The mean of exponential distribution is 1/lambda and the standard deviation is also 1/lambda. Set lambda = 0.2 for all of the simulations. We will investigate the distribution of averages of 40 exponentials.<br>
+
+**Comparison of sample mean with the theoretical mean.**
+```{r exponential distibution}
+library(ggplot2)
+library(dplyr)
+mn<-vector("numeric",length = 1000)
+for(i in 1:1000){
+  mn[i]<-mean(rexp(40,0.2))
+}
+th_mean=1/0.2
+sample_mean=mean(mn)
+```
+Hence the theoretical mean `r th_mean` and the sample mean `r sample_mean` are close,which proves the point of central limit theory.
+
+**comparison of sample variance and theoretical variance.**
+```{r}
+th_var<-((1/0.2)^2)/40
+sample_var<-var(mn)
+
+```
+The observed variance of the sampling distribution is `r sample_var` and the theoretical variance of sampling distribution is `r th_var`.This simulates the central limit theory. 
+
+**Showing  the sampling distribution to be approximately normal.**
+```{r cache=T}
+g<-ggplot(data.frame(mn=mn),aes(mn))+geom_histogram(fill="blue",aes(y=..density..))
+g<-g+geom_density(col="black")+labs(x="sample means")+labs(title="sampling distribution")
+g
+```
+
+*The sampling distribution resembles a normal distribution.*
+
